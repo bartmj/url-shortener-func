@@ -1,50 +1,60 @@
-bin/
-**/bin/
-!Modules/**
-obj
-csx
-.vs
-edge
-Publish
-
-*.user
-*.suo
-*.cscfg
-*.Cache
-project.lock.json
-
-/packages
-/TestResults
-
-/tools/NuGet.exe
-/App_Data
-/secrets
-/data
-.secrets
-appsettings.json
+# =========================
+# Azure Functions
+# =========================
 local.settings.json
+.azurefunctions/
+.funcignore
 
-node_modules
-dist
+# Azurite (local storage emulator)
+__blobstorage__/
+__queuestorage__/
+__azurite_db*__.json
 
-# Local python packages
-.python_packages/
+# =========================
+# Python
+# =========================
+__pycache__/
+*.py[cod]
+*$py.class
 
-# Python Environments
+# Virtual environments
+.venv/
 .env
-.venv
 env/
 venv/
 ENV/
 env.bak/
 venv.bak/
 
-# Byte-compiled / optimized / DLL files
-__pycache__/
-*.py[cod]
-*$py.class
+# Local packages (Azure Functions Python)
+.python_packages/
 
-# Azurite artifacts
-__blobstorage__
-__queuestorage__
-__azurite_db*__.json
+# =========================
+# Build / dist
+# =========================
+dist/
+build/
+
+# =========================
+# Node (jeśli używasz)
+# =========================
+node_modules/
+
+# =========================
+# IDE / system
+# =========================
+.vscode/
+.vs/
+*.user
+*.suo
+
+# OS
+.DS_Store
+Thumbs.db
+
+# =========================
+# Logs / temp
+# =========================
+*.log
+*.tmp
+*.cache
