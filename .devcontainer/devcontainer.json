@@ -1,0 +1,26 @@
+{
+  "name": "Azure Functions Python",
+  "image": "mcr.microsoft.com/devcontainers/python:3.11",
+  "features": {
+    "ghcr.io/devcontainers/features/node:1": {
+      "version": "lts"
+    }
+  },
+  "customizations": {
+    "vscode": {
+      "extensions": [
+        "ms-python.python",
+        "ms-azuretools.vscode-azurefunctions"
+      ]
+    }
+  },
+  "postCreateCommand": "npm install -g azure-functions-core-tools@4 --unsafe-perm true && pip install --no-cache-dir -r requirements.txt",
+  "forwardPorts": [7071],
+  "portsAttributes": {
+    "7071": {
+      "label": "Azure Functions",
+      "onAutoForward": "openBrowser"
+    }
+  },
+  "remoteUser": "vscode"
+}
