@@ -33,19 +33,19 @@ def ShortenUrl(req: func.HttpRequest) -> func.HttpResponse:
 
     original_url = req_body.get("url")
 
-    # if not original_url or not isinstance(original_url, str):
-    #     return func.HttpResponse(
-    #         json.dumps({"error": "Missing or invalid 'url' field."}),
-    #         status_code=400,
-    #         mimetype="application/json"
-    #     )
+    if not original_url or not isinstance(original_url, str):
+        return func.HttpResponse(
+            json.dumps({"error": "Missing or invalid 'url' field."}),
+            status_code=400,
+            mimetype="application/json"
+        )
 
-    # if not (original_url.startswith("http://") or original_url.startswith("https://")):
-    #     return func.HttpResponse(
-    #         json.dumps({"error": "URL must start with http:// or https://."}),
-    #         status_code=400,
-    #         mimetype="application/json"
-    #     )
+    if not (original_url.startswith("http://") or original_url.startswith("https://")):
+        return func.HttpResponse(
+            json.dumps({"error": "URL must start with http:// or https://."}),
+            status_code=400,
+            mimetype="application/json"
+        )
 
     short_code = generate_short_code()
     url_store[short_code] = original_url
