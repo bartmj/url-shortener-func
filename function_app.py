@@ -61,23 +61,29 @@ def ShortenUrl(req: func.HttpRequest) -> func.HttpResponse:
         mimetype="application/json"
     )
 
-@app.route(route="Redirect", auth_level=func.AuthLevel.ANONYMOUS)
+@app.route(route="Redirect", auth_level=func.AuthLevel.ANONYMOUS, methods=["GET"])
 def Redirect(req: func.HttpRequest) -> func.HttpResponse:
-    logging.info('Python HTTP trigger function processed a request.')
+    logging.info("Redirect endpoint called.")
 
-    name = req.params.get('name')
-    if not name:
-        try:
-            req_body = req.get_json()
-        except ValueError:
-            pass
-        else:
-            name = req_body.get('name')
+    short_code = req.params.get("shortCode")
 
-    if name:
-        return func.HttpResponse(f"Hello, {name}. This HTTP triggered function executed successfully.")
-    else:
+    if not short_code:
         return func.HttpResponse(
-             "This HTTP triggered function executed successfully. Pass a name in the query string or in the request body for a personalized response.",
-             status_code=200
+            json.dumps({"error": "Missing 'shortCode' query parameter."}),
+            status_code=400,
+            mimetype="application/json"
         )
+
+    original_url = url_store.get(short_code)
+
+    if not original_url:
+        return func.HttpResponse(
+            json.dumps({"error": "Short code not found."}),
+            status_code=404,
+            mimetype="application/json"
+        )
+
+    return func.HttpResponse(
+        status_code=302,
+        headers={"Location": original_url}
+    )
