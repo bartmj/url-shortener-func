@@ -30,6 +30,72 @@ def make_get_request(params=None):
     )
 
 
+# =========================
+# TESTY ShortenUrl
+# =========================
+
+def test_shorten_url_success():
+    req = make_post_request({"url": "https://example.com"})
+    resp = ShortenUrl(req)
+
+    assert resp.status_code == 200
+
+    data = json.loads(resp.get_body())
+    assert data["originalUrl"] == "https://example.com"
+    assert "shortCode" in data
+    assert isinstance(data["shortCode"], str)
+    assert len(data["shortCode"]) > 0
+
+
+def test_shorten_url_missing_url():
+    req = make_post_request({})
+    resp = ShortenUrl(req)
+
+    assert resp.status_code == 400
+
+    data = json.loads(resp.get_body())
+    assert data["error"] == "Missing or invalid 'url' field."
+
+
+def test_shorten_url_invalid_url_type():
+    req = make_post_request({"url": 123})
+    resp = ShortenUrl(req)
+
+    assert resp.status_code == 400
+
+    data = json.loads(resp.get_body())
+    assert data["error"] == "Missing or invalid 'url' field."
+
+
+def test_shorten_url_invalid_scheme():
+    req = make_post_request({"url": "ftp://example.com"})
+    resp = ShortenUrl(req)
+
+    assert resp.status_code == 400
+
+    data = json.loads(resp.get_body())
+    assert data["error"] == "URL must start with http:// or https://."
+
+
+def test_shorten_url_invalid_json():
+    req = func.HttpRequest(
+        method="POST",
+        url="/api/ShortenUrl",
+        body=b"not-json",
+        headers={"Content-Type": "application/json"},
+    )
+    resp = ShortenUrl(req)
+
+    assert resp.status_code == 400
+
+    data = json.loads(resp.get_body())
+    assert data["error"] == "Request body must be valid JSON."
+
+
+# =========================
+# TESTY Redirect
+# =========================
+
 def test_redirect_success():
     req = make_post_request({"url": "https://example.com"})
     resp = ShortenUrl(req)
